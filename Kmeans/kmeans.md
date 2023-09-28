@@ -63,7 +63,7 @@ for i in range(1, n):
 
 获取最终的聚类，设置`i`以防止不收敛导致的死循环
 
-```
+```python
 # 获得第一次聚类的结果
 centrals, clusters = kmeans(centrals, pixel_list)
 new_centrals, new_clusters = kmeans(centrals, pixel_list)
@@ -78,7 +78,7 @@ while continue_iteration(clusters, new_clusters) and i < 10000000:
 
 重新绘制图像
 
-```
+```python
 for i in range(len(new_centrals)):
     for p in new_clusters[i]:
         cluster_image[p.loc_x][p.loc_y] = new_centrals[i].color
@@ -87,4 +87,14 @@ plt.imsave('9-cluster-' + str(n) + '.png', cluster_image)
 
 ## 结果图片
 
-## 聚类可视化图片
+原图片：
+
+<img src="9.jpg" alt="9" style="zoom: 50%;" />
+
+当k=2, 3, 4, 6, 8, 10的结果：
+
+![9-total](9-total.png)
+
+## 聚类可视化图片(k = 3)
+
+![myplot](myplot.png)
