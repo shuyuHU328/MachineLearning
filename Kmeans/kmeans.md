@@ -89,11 +89,11 @@ plt.imsave('9-cluster-' + str(n) + '.png', cluster_image)
 
 原图片：
 
-<img src="9.jpg" alt="9" style="zoom: 50%;" />
+<img src="results/9.jpg" alt="9" style="zoom: 50%;" />
 
 当k=2, 3, 4, 6, 8, 10的结果：
 
-![9-total](9-total.png)
+![9-total](results/9-total.png)
 
 ## 聚类可视化图片(k = 3)
 
