@@ -49,12 +49,13 @@ def continue_iteration(old, new):
     for order in range(len(old)):
         for _p in old[order]:
             if _p.index not in map(lambda x: x.index, new):
-                return False
+                return True
+    return False
 
 
 if __name__ == '__main__':
     # 数据读入与处理
-    image = cv2.imread('9.jpg', 1)
+    image = cv2.cvtColor(cv2.imread('9.jpg', 1), cv2.COLOR_BGR2RGB)
     cluster_image = image.copy()
     pixel_list = []
     index_ = 0
@@ -83,7 +84,8 @@ if __name__ == '__main__':
     new_centrals, new_clusters = kmeans(centrals, pixel_list)
     i = 0
     # 聚类迭代直到满足条件或者上限
-    while continue_iteration(clusters, new_clusters) and i < 10000000:
+    while continue_iteration(clusters, new_clusters) and i < 50:
+        print("iteration %d" % i)
         centrals = new_centrals
         clusters = new_clusters
         new_centrals, new_clusters = kmeans(centrals, pixel_list)
