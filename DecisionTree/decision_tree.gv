@@ -1,0 +1,76 @@
+digraph G {
+	165354221162 [label="petal length (cm) <= 2.75
+samples = 120" shape=box]
+	165223124532 [label="class = setosa
+samples = 39" shape=box style=filled]
+	165353444946 [label="petal width (cm) <= 1.7
+samples = 81" shape=box]
+	165353444919 [label="petal length (cm) <= 5.25
+samples = 48" shape=box]
+	165353444943 [label="petal length (cm) <= 4.8
+samples = 46" shape=box]
+	165353444934 [label="petal width (cm) <= 1.5
+samples = 40" shape=box]
+	165353444931 [label="class = versicolor
+samples = 38" shape=box style=filled]
+	165353444922 [label="sepal length (cm) <= 5.45
+samples = 2" shape=box]
+	165223146012 [label="class = virginica
+samples = 1" shape=box style=filled]
+	165223146048 [label="class = versicolor
+samples = 1" shape=box style=filled]
+	165353444922 -> 165223146012
+	165353444922 -> 165223146048
+	165353444934 -> 165353444931
+	165353444934 -> 165353444922
+	165223146018 [label="sepal length (cm) <= 6.5
+samples = 6" shape=box]
+	165223146054 [label="petal width (cm) <= 1.5
+samples = 4" shape=box]
+	165223146057 [label="sepal length (cm) <= 6.15
+samples = 3" shape=box]
+	165223146060 [label="class = virginica
+samples = 1" shape=box style=filled]
+	165223146051 [label="sepal width (cm) <= 2.65
+samples = 2" shape=box]
+	165223146027 [label="class = versicolor
+samples = 1" shape=box style=filled]
+	165223146030 [label="class = virginica
+samples = 1" shape=box style=filled]
+	165223146051 -> 165223146027
+	165223146051 -> 165223146030
+	165223146057 -> 165223146060
+	165223146057 -> 165223146051
+	165223146015 [label="class = versicolor
+samples = 1" shape=box style=filled]
+	165223146054 -> 165223146057
+	165223146054 -> 165223146015
+	165223146021 [label="class = versicolor
+samples = 2" shape=box style=filled]
+	165223146018 -> 165223146054
+	165223146018 -> 165223146021
+	165353444943 -> 165353444934
+	165353444943 -> 165223146018
+	165223146063 [label="class = virginica
+samples = 2" shape=box style=filled]
+	165353444919 -> 165353444943
+	165353444919 -> 165223146063
+	165223146066 [label="petal length (cm) <= 4.949999999999999
+samples = 33" shape=box]
+	165223146072 [label="sepal width (cm) <= 3.0
+samples = 4" shape=box]
+	165223146075 [label="class = virginica
+samples = 3" shape=box style=filled]
+	165223146069 [label="class = versicolor
+samples = 1" shape=box style=filled]
+	165223146072 -> 165223146075
+	165223146072 -> 165223146069
+	165223146078 [label="class = virginica
+samples = 29" shape=box style=filled]
+	165223146066 -> 165223146072
+	165223146066 -> 165223146078
+	165353444946 -> 165353444919
+	165353444946 -> 165223146066
+	165354221162 -> 165223124532
+	165354221162 -> 165353444946
+}
