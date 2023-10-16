@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn import datasets
+from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 from graphviz import Digraph
 
@@ -68,7 +69,8 @@ class TreeNode:
     def add_node(self, graph, labels, class_names):
 
         graph.node(str(self.__hash__()), self.describe(labels, class_names), shape='box',
-                   style="filled" if self.is_leaf else None)
+                   style="filled" if self.is_leaf else None, color="#CC59CC" if self.is_leaf else None,
+                   fontcolor="white" if self.is_leaf else "black")
         if not self.is_leaf:
             self.left_node.add_node(graph, labels, class_names)
             self.right_node.add_node(graph, labels, class_names)
@@ -80,9 +82,18 @@ class TreeNode:
         if self.is_leaf:
             description += 'class = ' + class_names[self.label] + '\n'
         else:
-            description += labels[self.prop] + ' <= ' + str(self.split_num) + '\n'
+            description += labels[self.prop] + ' <= ' + str(round(self.split_num, 4)) + '\n'
         description += 'samples = ' + str(len(self.attributes))
         return description
+
+    def calculate_result(self, vector):
+        if self.is_leaf:
+            return self.label
+        else:
+            if vector[self.prop] <= self.split_num:
+                return self.left_node.calculate_result(vector)
+            else:
+                return self.right_node.calculate_result(vector)
 
 
 if __name__ == '__main__':
@@ -91,7 +102,13 @@ if __name__ == '__main__':
     target_name = iris.target_names
     x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2)
     root = TreeNode(np.array(x_train), y_train)
+    # 计算Micro-F1和Macro-F1
+    results = list(map(lambda x: root.calculate_result(x), x_test))
+    micro_f1 = f1_score(y_test, results, average="micro")
+    macro_f1 = f1_score(y_test, results, average="macro")
+    print("Micro-F1 Score: " + str(micro_f1))
+    print("Macro-F1 Score: " + str(macro_f1))
     # 绘制树
-    g = Digraph('G', filename='decision_tree.gv')
+    g = Digraph('G', filename='decision_tree_kami.gv')
     root.add_node(g, labels_name, target_name)
-    g.view()
+    # g.view()
