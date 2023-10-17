@@ -1,0 +1,52 @@
+digraph G {
+	147657077152 [label="petal length (cm) <= 2.45
+samples = 120" fontcolor=black shape=box]
+	147656941731 [label="class = setosa
+samples = 39" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657093663 [label="petal length (cm) <= 4.7
+samples = 81" fontcolor=black shape=box]
+	147653985847 [label="class = versicolor
+samples = 34" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147653204209 [label="petal width (cm) <= 1.75
+samples = 47" fontcolor=black shape=box]
+	147653207300 [label="petal length (cm) <= 4.9
+samples = 8" fontcolor=black shape=box]
+	147653207312 [label="class = versicolor
+samples = 2" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147653207315 [label="petal width (cm) <= 1.5
+samples = 6" fontcolor=black shape=box]
+	147653207303 [label="class = virginica
+samples = 3" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657111534 [label="sepal length (cm) <= 6.95
+samples = 3" fontcolor=black shape=box]
+	147657111525 [label="class = versicolor
+samples = 2" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657111537 [label="class = virginica
+samples = 1" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657111534 -> 147657111525
+	147657111534 -> 147657111537
+	147653207315 -> 147653207303
+	147653207315 -> 147657111534
+	147653207300 -> 147653207312
+	147653207300 -> 147653207315
+	147657111522 [label="petal length (cm) <= 4.8
+samples = 39" fontcolor=black shape=box]
+	147657111528 [label="sepal length (cm) <= 5.95
+samples = 3" fontcolor=black shape=box]
+	147657118983 [label="class = versicolor
+samples = 1" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657118980 [label="class = virginica
+samples = 2" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657111528 -> 147657118983
+	147657111528 -> 147657118980
+	147657118986 [label="class = virginica
+samples = 36" color="#CC59CC" fontcolor=white shape=box style=filled]
+	147657111522 -> 147657111528
+	147657111522 -> 147657118986
+	147653204209 -> 147653207300
+	147653204209 -> 147657111522
+	147657093663 -> 147653985847
+	147657093663 -> 147653204209
+	147657077152 -> 147656941731
+	147657077152 -> 147657093663
+}
