@@ -1,7 +1,5 @@
 # K-means实验报告
-
 [toc]
-
 ## K-means算法原理
 
 K-means算法是一种经典的无监督分类算法，利用相似性度量方法来衡量数据集中所有数据之间的关系，将关系比较密切的数据划分到一个集合中。以下为K-means算法的基本步骤：
@@ -31,7 +29,7 @@ import matplotlib.pyplot as plt
 选择聚类大小，初始化相关数据
 
 ```python
-image = cv2.imread('9.jpg', 1)
+image = cv2.cvtColor(cv2.imread('9.jpg', 1), cv2.COLOR_BGR2RGB)
 cluster_image = image.copy()
 pixel_list = []
 index_ = 0
@@ -69,11 +67,37 @@ centrals, clusters = kmeans(centrals, pixel_list)
 new_centrals, new_clusters = kmeans(centrals, pixel_list)
 i = 0
 # 聚类迭代直到满足条件或者上限
-while continue_iteration(clusters, new_clusters) and i < 10000000:
+while continue_iteration(clusters, new_clusters) and i < 50:
     centrals = new_centrals
     clusters = new_clusters
     new_centrals, new_clusters = kmeans(centrals, pixel_list)
     i += 1
+```
+
+其中所用函数为
+
+```python
+def kmeans(centers, p_list):
+    origin_clusters = []
+    for i in range(n):
+        origin_clusters.append([])
+    for p in p_list:
+        p.put_into_clusters(centers, origin_clusters)
+    new_centrals = list(map(lambda x: new_central(x), origin_clusters))
+    return new_centrals, origin_clusters
+
+# 判断是否继续迭代
+def continue_iteration(old, new):
+    for order in range(len(old)):
+        for _p in old[order]:
+            if _p.index not in map(lambda x: x.index, new):
+                return True
+    return False
+
+# 获取新的聚类中心
+def new_central(cluster):
+    color_cluster = list(map(lambda x: x.color, cluster))
+    return Pixel(-1, -1, -1, np.mean(color_cluster, axis=0))
 ```
 
 重新绘制图像
