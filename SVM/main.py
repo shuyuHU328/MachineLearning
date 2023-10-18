@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # 输出支持向量
     print("support vectors: ", end='')
     print(model.support_vectors_)
-    print(model.n_support_)
+    # print(model.n_support_)
     support_vectors = model.support_vectors_
     # 绘制样本
     plt.scatter(list(X[:20, 0]), list(X[:20, 1]), label='Y = -1')
