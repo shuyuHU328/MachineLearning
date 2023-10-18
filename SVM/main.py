@@ -37,4 +37,5 @@ if __name__ == '__main__':
     plt.plot(xx, y_1, color='black', linestyle='--')
     plt.xlim(-5, 4)
     plt.legend()
+    plt.savefig('svm.png')
     plt.show()
