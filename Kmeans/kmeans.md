@@ -115,7 +115,7 @@ plt.imsave('9-cluster-' + str(n) + '.png', cluster_image)
 
 <img src="results/9.jpg" alt="9" style="zoom: 50%;" />
 
-当k=2, 3, 4, 6, 8, 10的结果：
+当k=2, 3, 4, 6, 8, 10的结果（顺序从左往右）：
 
 ![9-total](results/9-total.png)
 
