@@ -11,7 +11,7 @@ if __name__ == '__main__':
     model = svm.SVC(kernel="linear")
     model.fit(X, Y)
     # 输出支持向量
-    print("support vectors: ", end='')
+    print("support vectors: ")
     print(model.support_vectors_)
     # print(model.n_support_)
     support_vectors = model.support_vectors_
