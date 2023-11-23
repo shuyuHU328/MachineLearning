@@ -3,7 +3,6 @@ import math
 from collections import namedtuple, deque
 import random
 from itertools import count
-import matplotlib
 import matplotlib.pyplot as plt
 
 import torch
@@ -12,7 +11,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MEMORY_CAPACITY = 8848
+MEMORY_CAPACITY = 10000
 # BATCH_SIZE is the number of transitions sampled from the replay buffer
 # GAMMA is the discount factor
 # EPS_START is the starting value of epsilon
@@ -42,6 +41,7 @@ class DQN(nn.Module):
         return self.layer3(x)
 
 
+# 作为经验池的数据结构，每次记录(s, a, s', r)
 Transition = namedtuple('Transition',
                         ('state', 'action', 'next_state', 'reward'))
 
@@ -63,6 +63,11 @@ class ReplayMemory(object):
 
 steps_done = 0
 
+'''select_action - will select an action accordingly to an epsilon greedy policy. Simply put, we’ll sometimes use our 
+model for choosing the action, and sometimes we’ll just sample one uniformly. The probability of choosing a random 
+action will start at EPS_START and will decay exponentially towards EPS_END. EPS_DECAY controls the rate of the 
+decay.'''
+
 
 def select_action(now_state):
     global steps_done
@@ -71,9 +76,7 @@ def select_action(now_state):
     steps_done += 1
     if sample > eps_threshold:
         with torch.no_grad():
-            # t.max(1) will return the largest column value of each row.
-            # second column on max result is index of where max element was
-            # found, so we pick action with the larger expected reward.
+            # 选择value值最高的action
             return policy_net(now_state).max(1)[1].view(1, 1)
     else:
         return torch.tensor([[env.action_space.sample()]], device=device, dtype=torch.long)
@@ -83,13 +86,8 @@ def optimize_model():
     if len(memory) < BATCH_SIZE:
         return
     transitions = memory.sample(BATCH_SIZE)
-    # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
-    # detailed explanation). This converts batch-array of Transitions
-    # to Transition of batch-arrays.
+    # Converts batch-array of Transitions to Transition of batch-arrays.
     batch = Transition(*zip(*transitions))
-
-    # Compute a mask of non-final states and concatenate the batch elements
-    # (a final state would've been the one after which simulation ended)
     non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device,
                                   dtype=torch.bool)
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
@@ -113,7 +111,7 @@ def optimize_model():
     # Compute the expected Q values
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch
 
-    # Compute Huber loss
+    # 计算 Huber loss
     criterion = nn.SmoothL1Loss()
     loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
 
@@ -128,6 +126,7 @@ def optimize_model():
 episode_durations = []
 
 
+# 绘制得分图像
 def plot_durations(show_result=False):
     plt.figure(1)
     durations_t = torch.tensor(episode_durations, dtype=torch.float)
@@ -145,19 +144,19 @@ def plot_durations(show_result=False):
         means = torch.cat((torch.zeros(99), means))
         plt.plot(means.numpy())
 
-    plt.pause(0.001)  # pause a bit so that plots are updated
-
 
 if __name__ == '__main__':
+    # 选择gym库中的CartPole-v1，并更改最大倾斜角度
     # env = gym.make('CartPole-v1', render_mode='human')
     env = gym.make('CartPole-v1')
-
     env.theta_threshold_radians = 15 * 2 * math.pi / 360
+    env.x_threshold = 2.4
     # Get number of actions from gym action space
     actions = env.action_space.n
     # Get the number of state observations
     state, _ = env.reset()
     observations = len(state)
+    # 创建policy net与target net确保用来预测的r+maxQ‘与当前的Q独立以保证稳定性
     policy_net = DQN(observations, actions).to(device)
     target_net = DQN(observations, actions).to(device)
     target_net.load_state_dict(policy_net.state_dict())
@@ -177,35 +176,25 @@ if __name__ == '__main__':
                 reward -= 0.15 * abs(theta)
             reward = torch.tensor([reward], device=device)
             done = terminated or truncated
-
             if terminated:
                 next_state = None
             else:
                 next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0)
-
-            # Store the transition in memory
+            # 将当前的transition放入经验池中
             memory.push(state, action, next_state, reward)
-
-            # Move to the next state
             state = next_state
-
-            # Perform one step of the optimization (on the policy network)
             optimize_model()
-
-            # Soft update of the target network's weights
+            # 更新target network的权重
             # θ′ ← τ θ + (1 −τ )θ′
             target_net_state_dict = target_net.state_dict()
             policy_net_state_dict = policy_net.state_dict()
             for key in policy_net_state_dict:
                 target_net_state_dict[key] = policy_net_state_dict[key] * TAU + target_net_state_dict[key] * (1 - TAU)
             target_net.load_state_dict(target_net_state_dict)
-
             if done:
                 episode_durations.append(t + 1)
-                # plot_durations()
                 break
         print(str(i_episode) + 'Complete')
     env.close()
     plot_durations(show_result=True)
-    plt.ioff()
     plt.show()
